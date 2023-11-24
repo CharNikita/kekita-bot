@@ -58,6 +58,7 @@ public class MemeHandler implements TelegramUpdateHandler {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(replies.get(new Random().nextInt(replies.size())))
+                .replyToMessageId(update.getMessage().getMessageId())
                 .build();
     }
 }
