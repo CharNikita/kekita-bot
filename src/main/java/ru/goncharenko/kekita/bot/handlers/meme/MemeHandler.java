@@ -13,22 +13,22 @@ import ru.goncharenko.kekita.metrics.MetricService;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class MemeHandler implements TelegramUpdateHandler {
+    private final Integer rateLimit;
     Logger logger = LoggerFactory.getLogger(MemeHandler.class);
     private final Random random = new Random();
     private final MetricService metricService;
     private final List<String> replies;
-    private final Bucket bucket;
     private final Integer frequency;
-
+    private final Map<Long, Bucket> cache = new ConcurrentHashMap<>();
 
     public MemeHandler(Config config, MetricService metricService) {
-        this.bucket = Bucket.builder()
-                .addLimit(Bandwidth.simple(config.rateLimit(), Duration.ofMinutes(1)))
-                .build();
+        this.rateLimit = config.rateLimit();
         this.frequency = config.frequency();
         this.replies = config.replies();
         this.metricService = metricService;
@@ -36,12 +36,16 @@ public class MemeHandler implements TelegramUpdateHandler {
 
     @Override
     public Boolean isAccept(Update update) {
+        if (update.getMessage() == null) {
+            return false;
+        }
         final boolean frequencyCheck = random.nextDouble() * 100 < frequency;
         if (!frequencyCheck) {
             metricService.trackMemeHandlerFrequencyCheckFail();
             logger.info("Failed frequency check in MemeTelegramUpdateHandler");
             return false;
         }
+        final var bucket = resolveBucket(update.getMessage().getChatId());
         final boolean tokenCheck = bucket.tryConsume(1);
         if (!tokenCheck) {
             metricService.trackMemeHandlerTokenCheckFail();
@@ -59,6 +63,16 @@ public class MemeHandler implements TelegramUpdateHandler {
                 .chatId(update.getMessage().getChatId())
                 .text(replies.get(new Random().nextInt(replies.size())))
                 .replyToMessageId(update.getMessage().getMessageId())
+                .build();
+    }
+
+    public Bucket resolveBucket(Long cacheKey) {
+        return cache.computeIfAbsent(cacheKey, this::createBucket);
+    }
+
+    private Bucket createBucket(Long cacheKey) {
+        return Bucket.builder()
+                .addLimit(Bandwidth.simple(rateLimit, Duration.ofMinutes(1)))
                 .build();
     }
 }

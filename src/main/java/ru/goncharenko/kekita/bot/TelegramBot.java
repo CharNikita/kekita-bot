@@ -25,7 +25,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             List<TelegramUpdateHandler> handlerList,
             MetricService metricService
     ) {
-        super(config.token());
+        super(config.apiToken());
         this.botName = config.name();
         this.handlerList = handlerList;
         this.metricService = metricService;
