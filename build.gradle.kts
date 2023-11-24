@@ -18,6 +18,8 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+
     implementation("org.telegram:telegrambots:6.8.0")
     implementation("com.github.vladimir-bukhtoyarov:bucket4j-core:7.6.0")
 
