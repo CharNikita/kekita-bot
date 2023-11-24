@@ -2,7 +2,6 @@ package ru.goncharenko.kekita.bot.handlers.echo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,7 +10,6 @@ import ru.goncharenko.kekita.bot.handlers.TelegramUpdateHandler;
 import java.util.Random;
 
 
-@Component
 public class EchoHandler implements TelegramUpdateHandler {
     Logger logger = LoggerFactory.getLogger(EchoHandler.class);
     private final Random random = new Random();
