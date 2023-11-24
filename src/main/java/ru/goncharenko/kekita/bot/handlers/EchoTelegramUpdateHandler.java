@@ -14,8 +14,8 @@ public class EchoTelegramUpdateHandler implements TelegramUpdateHandler {
 
     @Override
     public Boolean isAccept(Update update) {
-        logger.info("Update is accepted in EchoTelegramUpdateHandler");
-        return true;
+//        logger.info("Update is accepted in EchoTelegramUpdateHandler");
+        return false;
     }
 
     @Override
