@@ -8,13 +8,21 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.goncharenko.kekita.bot.handlers.TelegramUpdateHandler;
 
+import java.util.Random;
+
 
 @Component
-public class Handler implements TelegramUpdateHandler {
-    Logger logger = LoggerFactory.getLogger(Handler.class);
+public class EchoHandler implements TelegramUpdateHandler {
+    Logger logger = LoggerFactory.getLogger(EchoHandler.class);
+    private final Random random = new Random();
 
     @Override
     public Boolean isAccept(Update update) {
+        final boolean frequencyCheck = random.nextDouble() * 100 < 10;
+        if (!frequencyCheck) {
+            logger.info("Failed frequency check in EchoTelegramUpdateHandler");
+            return false;
+        }
         logger.info("Update is accepted in EchoTelegramUpdateHandler");
         return true;
     }

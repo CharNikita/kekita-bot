@@ -9,6 +9,17 @@ bot:
         - "A"
         - "B"
         - "C"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: heals,metrics
+  simple:
+    metrics:
+      export:
+        enabled: true
+
 logging:
   level:
     root: INFO

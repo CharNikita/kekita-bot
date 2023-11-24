@@ -8,6 +8,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.goncharenko.kekita.bot.handlers.TelegramUpdateHandler;
+import ru.goncharenko.kekita.metrics.MetricService;
 
 import java.util.List;
 
@@ -17,16 +18,23 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final List<TelegramUpdateHandler> handlerList;
     private final String botName;
+    private final MetricService metricService;
 
-    public TelegramBot(BotConfig config, List<TelegramUpdateHandler> handlerList) {
+    public TelegramBot(
+            BotConfig config,
+            List<TelegramUpdateHandler> handlerList,
+            MetricService metricService
+    ) {
         super(config.token());
         this.botName = config.name();
         this.handlerList = handlerList;
+        this.metricService = metricService;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
         MDC.put("updateId", String.valueOf(update.getUpdateId()));
+        metricService.trackTelegramUpdate();
         try {
             handlerList.stream()
                     .filter(handler -> handler.isAccept(update))
@@ -35,13 +43,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                         try {
                             execute(method);
                         } catch (TelegramApiException e) {
+                            metricService.trackTelegramError();
                             logger.error(e.getMessage());
                         }
                     });
         } finally {
             MDC.clear();
         }
-
     }
 
     @Override
