@@ -2,6 +2,7 @@ package ru.goncharenko.kekita;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import java.util.List;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class KekitaApplication {
     public static void main(String[] args) {
         SpringApplication.run(KekitaApplication.class, args);

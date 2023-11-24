@@ -1,1 +1,8 @@
-BOT_TOKEN: "5905217606:AAFjONtp2QeekO60LkuxjYyvs6ZAxMgmAhg"
+bot:
+  token: "5905217606:AAFjONtp2QeekO60LkuxjYyvs6ZAxMgmAhg"
+  name: "KekitaBot"
+logging:
+  level:
+    root: INFO
+  pattern.console: "-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} [updateId - %X{updateId}] %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+  include-application-name: false

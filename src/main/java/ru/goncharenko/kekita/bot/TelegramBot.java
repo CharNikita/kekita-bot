@@ -1,6 +1,8 @@
 package ru.goncharenko.kekita.bot;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,32 +13,39 @@ import java.util.List;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-    private final List<TelegramUpdateHandler> handlerList;
+    Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
-    public TelegramBot(
-            @Value("${BOT_TOKEN}") String token,
-            List<TelegramUpdateHandler> handlerList
-    ) {
-        super(token);
+    private final List<TelegramUpdateHandler> handlerList;
+    private final String botName;
+
+    public TelegramBot(BotConfig config, List<TelegramUpdateHandler> handlerList) {
+        super(config.token());
+        this.botName = config.name();
         this.handlerList = handlerList;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        handlerList.stream()
-                .filter(handler -> handler.isAccept(update))
-                .map(handler -> handler.handle(update))
-                .forEach(method -> {
-                    try {
-                        execute(method);
-                    } catch (TelegramApiException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        MDC.put("updateId", String.valueOf(update.getUpdateId()));
+        try {
+            handlerList.stream()
+                    .filter(handler -> handler.isAccept(update))
+                    .map(handler -> handler.handle(update))
+                    .forEach(method -> {
+                        try {
+                            execute(method);
+                        } catch (TelegramApiException e) {
+                            logger.error(e.getMessage());
+                        }
+                    });
+        } finally {
+            MDC.clear();
+        }
+
     }
 
     @Override
     public String getBotUsername() {
-        return "username";
+        return this.botName;
     }
 }
