@@ -1,5 +1,5 @@
 bot:
-  token: "5905217606:AAFjONtp2QeekO60LkuxjYyvs6ZAxMgmAhg"
+  token: ${BOT_TOKEN}
   name: "KekitaBot"
   handlers:
     meme:
