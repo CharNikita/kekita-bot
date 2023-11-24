@@ -15,7 +15,7 @@ public class EchoTelegramUpdateHandler implements TelegramUpdateHandler {
     }
 
     @Override
-    public BotApiMethod handle(Update update) {
+    public BotApiMethod<?> handle(Update update) {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(update.getMessage().toString())
