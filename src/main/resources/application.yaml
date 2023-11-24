@@ -1,6 +1,14 @@
 bot:
   token: "5905217606:AAFjONtp2QeekO60LkuxjYyvs6ZAxMgmAhg"
   name: "KekitaBot"
+  handlers:
+    meme:
+      frequency: 20
+      rate-limit: 3
+      replies:
+        - "A"
+        - "B"
+        - "C"
 logging:
   level:
     root: INFO
