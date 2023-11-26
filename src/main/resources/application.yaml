@@ -1,7 +1,9 @@
 bot:
-  token: ${BOT_TOKEN}
+  api-token: ${BOT_TOKEN}
   name: "KekitaBot"
   handlers:
+    echo:
+      enabled: false
     meme:
       frequency: 20
       rate-limit: 3
