@@ -27,10 +27,10 @@ public class MemeHandler implements TelegramUpdateHandler {
     private final Integer frequency;
     private final Map<Long, Bucket> cache = new ConcurrentHashMap<>();
 
-    public MemeHandler(Config config, MetricService metricService) {
-        this.rateLimit = config.rateLimit();
-        this.frequency = config.frequency();
-        this.replies = config.replies();
+    public MemeHandler(MemeConfig memeConfig, MetricService metricService) {
+        this.rateLimit = memeConfig.rateLimit();
+        this.frequency = memeConfig.frequency();
+        this.replies = memeConfig.replies();
         this.metricService = metricService;
     }
 
