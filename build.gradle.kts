@@ -22,6 +22,7 @@ dependencies {
 
     implementation("org.telegram:telegrambots:6.8.0")
     implementation("com.github.vladimir-bukhtoyarov:bucket4j-core:7.6.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("com.theokanning.openai-gpt3-java:service:0.18.2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
